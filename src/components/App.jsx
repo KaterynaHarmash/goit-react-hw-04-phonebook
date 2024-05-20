@@ -11,11 +11,11 @@ export const App = () => {
 
   // Завантаження контактів з localStorage при монтуванні компонента
   useEffect(() => {
-    console.log('iamfirst');
-    const savedContacts = window.localStorage.getItem('userContacts');
-    if (savedContacts !== '[]') {
-      console.log('true');
-      setContacts(JSON.parse(savedContacts));
+    const savedContacts = JSON.parse(
+      window.localStorage.getItem('userContacts')
+    );
+    if (savedContacts.length !== 0) {
+      setContacts(savedContacts);
     }
   }, []); // Виконується тільки один раз при монтуванні компонента
 
