@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { nanoid } from 'nanoid';
 import { ContactsList } from './ContactList/ContactList';
@@ -9,18 +9,31 @@ export const App = () => {
   const [contacts, setContacts] = useState([]);
   const [filter, setFilter] = useState('');
 
+  // Завантаження контактів з localStorage при монтуванні компонента
+  useEffect(() => {
+    console.log('iamfirst');
+    const savedContacts = window.localStorage.getItem('userContacts');
+    if (savedContacts !== '[]') {
+      console.log('true');
+      setContacts(JSON.parse(savedContacts));
+    }
+  }, []); // Виконується тільки один раз при монтуванні компонента
+
+  // Збереження контактів у localStorage при зміні стану contacts
+  useEffect(() => {
+    window.localStorage.setItem('userContacts', JSON.stringify(contacts));
+  }, [contacts]); // Виконується при кожній зміні contacts
+
   const onDelete = contactId => {
-    setContacts(prev =>
-      prev.contacts.filter(contact => contact.id !== contactId)
-    );
+    setContacts(prev => prev.filter(contact => contact.id !== contactId));
   };
 
   const addContact = newContact => {
     if (contacts.find(contact => contact.name === newContact.name)) {
       return alert('This Contact is already in contacts');
     }
-    setContacts(prevState => [
-      ...prevState.contacts,
+    setContacts(prevContacts => [
+      ...prevContacts,
       { ...newContact, id: nanoid() },
     ]);
   };
