@@ -14,7 +14,7 @@ export const App = () => {
     const savedContacts = JSON.parse(
       window.localStorage.getItem('userContacts')
     );
-    if (savedContacts.length !== 0) {
+    if (savedContacts.length !== 0 || savedContacts !== null) {
       setContacts(savedContacts);
     }
   }, []); // Виконується тільки один раз при монтуванні компонента
